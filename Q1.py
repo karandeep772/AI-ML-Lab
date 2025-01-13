@@ -1,0 +1,12 @@
+num1=float(input("enter the num 1:"))
+num2=float(input("enter the num 2:"))
+addition=num1+num2
+subtraction = num1-num2
+multiplication = num1*num2
+division = num1/num2
+modulus= num1%num2
+print(f"addition: {num1}+{num2}={addition}")
+print(f"susbstraction {num1}-{num2}={subtraction}")
+print(f"multiplication: {num1}*{num2}={multiplication}")
+print(f"division: {num1}/{num2}={division}")
+print(f"modulus: {num1}%{num2}={modulus}")
