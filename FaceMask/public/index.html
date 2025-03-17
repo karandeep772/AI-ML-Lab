@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mask Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #4A90E2, #50C9C3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        input {
+            display: none;
+        }
+
+        label {
+            background: #4A90E2;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        label:hover {
+            background: #357ABD;
+        }
+
+        button {
+            background: #50C9C3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #3CAEA3;
+        }
+
+        #result {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        img {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Mask Detection System</h2>
+
+    <div class="container">
+        <label for="imageInput">Choose an Image</label>
+        <input type="file" id="imageInput" accept="image/*">
+        <button onclick="uploadImage()">Detect Mask</button>
+
+        <p id="result"></p>
+        <img id="uploadedImage">
+    </div>
+
+    <script>
+        function uploadImage() {
+            const input = document.getElementById("imageInput");
+            const file = input.files[0];
+
+            if (!file) {
+                alert("Please upload an image.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function () {
+                const img = document.getElementById("uploadedImage");
+                img.src = reader.result;
+                img.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            fetch("http://localhost:5000/detect", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultText = document.getElementById("result");
+                resultText.innerText = data.result;
+                resultText.style.color = data.result === "Entry Allowed" ? "#27AE60" : "#E74C3C";
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+
+</body>
+</html>
